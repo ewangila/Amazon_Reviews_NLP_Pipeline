@@ -1,8 +1,3 @@
-"""
-Standalone NLP Pipeline – Amazon Customer Reviews (100-pt version)
-Preprocessing, overall frequencies, per-rating term analysis, visualization.
-"""
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
