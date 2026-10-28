@@ -13,7 +13,8 @@ venv/
 .venv/
 *.egg-info/
 dist/
-build/# OS / editor junk
+build/
+# OS / editor junk
 .DS_Store
 .vscode/
 .idea/
