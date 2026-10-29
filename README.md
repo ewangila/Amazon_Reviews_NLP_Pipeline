@@ -281,7 +281,7 @@ The scripts currently expect this relative path. Run them from the repository ro
 
 ---
 
-## 🚀 Running the Project
+## Running the Project
 
 Each pipeline can be executed independently.
 
@@ -390,7 +390,7 @@ These are potential extensions rather than claims about functionality already im
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License**. See the [`LICENSE`](LICENSE) file for details.
 
