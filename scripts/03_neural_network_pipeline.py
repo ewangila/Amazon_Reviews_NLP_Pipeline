@@ -1,10 +1,3 @@
-"""
-Standalone Neural Network Pipeline – Amazon Customer Reviews (100-pt version)
-TF-IDF + class-weighted Logistic Regression baseline +
-regularized MLP (L2, dropout, EarlyStopping, ReduceLROnPlateau) +
-quantitative comparison table.
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,18 +16,16 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# ------------------------------------------------------------------
+
 # 1. Load data
-# ------------------------------------------------------------------
 df = pd.read_csv('amazon_reviews_lab.csv')
 df = df.dropna(subset=['review_text', 'rating'])
 
 X = df['review_text']
 y = df['rating'] - 1   # 1-5 → 0-4
 
-# ------------------------------------------------------------------
+
 # 2. TF-IDF
-# ------------------------------------------------------------------
 vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
 X_tfidf = vectorizer.fit_transform(X)
 
@@ -42,20 +33,16 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_tfidf, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# ------------------------------------------------------------------
+
 # 3. Class weights
-# ------------------------------------------------------------------
 classes = np.unique(y_train)
 class_weights = compute_class_weight('balanced', classes=classes, y=y_train)
 class_weight_dict = dict(zip(classes, class_weights))
 print("Class weights (1-5 stars):", {k+1: round(v, 2) for k, v in class_weight_dict.items()})
 
-# ------------------------------------------------------------------
+
 # 4. Baseline – Logistic Regression
-# ------------------------------------------------------------------
-print("\n" + "="*60)
 print("BASELINE: Logistic Regression (with class weights)")
-print("="*60)
 
 lr = LogisticRegression(
     class_weight='balanced',
@@ -70,12 +57,9 @@ print(f"Test Accuracy: {accuracy_score(y_test, y_pred_lr):.4f}")
 print("\nClassification Report (Logistic Regression):\n")
 print(classification_report(y_test, y_pred_lr, target_names=['1','2','3','4','5']))
 
-# ------------------------------------------------------------------
+
 # 5. Neural Network
-# ------------------------------------------------------------------
-print("\n" + "="*60)
 print("NEURAL NETWORK (MLP) – class weights + L2 + early stopping")
-print("="*60)
 
 X_train_dense = X_train.toarray()
 X_test_dense  = X_test.toarray()
@@ -123,9 +107,8 @@ y_pred_nn = np.argmax(model.predict(X_test_dense, verbose=0), axis=1)
 print("\nClassification Report (Neural Network):\n")
 print(classification_report(y_test, y_pred_nn, target_names=['1','2','3','4','5']))
 
-# ------------------------------------------------------------------
+
 # 6. Visualizations
-# ------------------------------------------------------------------
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
 cm_lr = confusion_matrix(y_test, y_pred_lr)
@@ -162,14 +145,10 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
-# ------------------------------------------------------------------
+
 # 7. Quantitative comparison table
-# ------------------------------------------------------------------
-print("\n" + "="*50)
 print("MODEL COMPARISON SUMMARY")
-print("="*50)
 print(f"{'Model':<25} {'Accuracy':>10} {'Macro-F1':>10}")
-print("-"*50)
 print(f"{'Logistic Regression':<25} {accuracy_score(y_test, y_pred_lr):>10.4f} "
       f"{f1_score(y_test, y_pred_lr, average='macro'):>10.4f}")
 print(f"{'Neural Network (MLP)':<25} {test_acc:>10.4f} "

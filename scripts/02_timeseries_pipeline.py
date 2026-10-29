@@ -1,9 +1,3 @@
-"""
-Standalone Time Series Pipeline – Amazon Customer Reviews (100-pt version)
-Resampling, multi-test stationarity (ADF+KPSS), seasonal decomposition,
-ACF/PACF, multi-model ARIMA comparison, forecasting.
-"""
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,9 +10,8 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
-# ------------------------------------------------------------------
+
 # 1. Load & prepare
-# ------------------------------------------------------------------
 df = pd.read_csv('amazon_reviews_lab.csv')
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 
@@ -29,9 +22,8 @@ df = df.set_index('timestamp')
 monthly_review_count = df.resample('M').size()
 monthly_avg_rating   = df['rating'].resample('M').mean()
 
-# ------------------------------------------------------------------
+
 # 2. Trend plots
-# ------------------------------------------------------------------
 plt.figure(figsize=(12, 5))
 monthly_review_count.plot(color='blue')
 plt.title('Monthly Review Volume Over Time')
@@ -53,14 +45,13 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# ------------------------------------------------------------------
+
 # 3. Stationarity (ADF + KPSS + seasonal decomposition)
-# ------------------------------------------------------------------
-print("=== ADF Test (Original) ===")
+print("--ADF Test (Original)--")
 adf_orig = adfuller(monthly_review_count)
 print(f"ADF Statistic: {adf_orig[0]:.4f} | p-value: {adf_orig[1]:.4f}")
 
-print("\n=== KPSS Test (Original) ===")
+print("\n--KPSS Test (Original)--")
 kpss_orig = kpss(monthly_review_count, regression='c')
 print(f"KPSS Statistic: {kpss_orig[0]:.4f} | p-value: {kpss_orig[1]:.4f}")
 
@@ -72,7 +63,7 @@ plt.tight_layout()
 plt.show()
 
 monthly_diff = monthly_review_count.diff().dropna()
-print("\n=== ADF Test (Differenced) ===")
+print("\n--ADF Test (Differenced)--")
 adf_diff = adfuller(monthly_diff)
 print(f"ADF Statistic: {adf_diff[0]:.4f} | p-value: {adf_diff[1]:.4f}")
 
@@ -84,9 +75,8 @@ plt.ylabel('Differenced Count')
 plt.tight_layout()
 plt.show()
 
-# ------------------------------------------------------------------
+
 # 4. ACF / PACF + multi-model ARIMA comparison
-# ------------------------------------------------------------------
 fig, axes = plt.subplots(1, 2, figsize=(14, 4))
 plot_acf(monthly_diff, ax=axes[0], lags=20)
 plot_pacf(monthly_diff, ax=axes[1], lags=20)
