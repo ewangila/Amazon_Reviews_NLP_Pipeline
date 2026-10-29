@@ -404,6 +404,4 @@ Ensure that the dataset and any third-party resources used in the project comply
 
 GitHub: [@ewangila](https://github.com/ewangila)
 
-Repository: [Amazon Reviews NLP Pipeline](https://github.com/ewangila/Amazon_Reviews_NLP_Pipeline)
-
 ---
